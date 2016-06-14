@@ -22,7 +22,7 @@ var tiles = new Image();
 tiles.src = "img/tiles.png";
 
 var player;
-var enemy;
+var enemies = [];
 
 var isPlaying;
 
@@ -56,7 +56,6 @@ function init() {
 	clearBtn.addEventListener("click", clearRect, false);
 
 	player = new Player;
-	enemy = new Enemy;
 
 	drawBg();
 
@@ -65,6 +64,12 @@ function init() {
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
 
+}
+
+function spawnEnemy(count) {
+	for (var i = 0; i < count; i++) {
+		enemies[i] = new Enemy();
+	}
 }
 
 function loop() {
@@ -86,12 +91,19 @@ function stopLoop() {
 
 function draw() {
 	player.draw();
-	enemy.draw();
+
+	clearCtxEnemy();
+	for (var i = 0; i < enemies.length; i++) {
+		enemies[i].draw();
+	}
 }
 
 function update() {
 	player.update();
-	enemy.update();
+
+	for (var i = 0; i < enemies.length; i++) {
+		enemies[i].update();
+	}
 }
 
 //Objects
@@ -138,7 +150,7 @@ Player.prototype.chooseDir = function() {
 function Enemy() {
 	this.srcX = 320;
 	this.srcY = 96;
-	this.drawX = Math.floor((Math.random() * 32) + gameWidth);
+	this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
 	this.drawY = Math.floor((Math.random() * gameHeight) - this.height);
 	this.width = 32;
 	this.height = 32;
@@ -146,7 +158,6 @@ function Enemy() {
 }
 
 Enemy.prototype.draw = function() {
-	clearCtxEnemy();
 	ctxEnemy.drawImage(tiles, this.srcX, this.srcY, this.width, this.height, //image parammeters
 		this.drawX, this.drawY, this.width, this.height); //coordinates on canvas
 }
@@ -154,7 +165,7 @@ Enemy.prototype.draw = function() {
 Enemy.prototype.update = function() {
 	this.drawX -= this.speed;
 	if(this.drawX < 0) {
-		this.drawX = Math.floor((Math.random() * 32) + gameWidth);
+		this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
 		this.drawY = Math.floor((Math.random() * gameHeight));
 	}
 }
