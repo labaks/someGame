@@ -1,0 +1,13 @@
+body {
+	background: #333;
+}
+#gameName {
+	color: #fff;
+	text-align: center;
+	font: 24px bold Courier;
+}
+#map {
+	background: #fff;
+	display: block;
+	margin: 30px auto 0;
+}
