@@ -26,6 +26,11 @@ var enemies = [];
 
 var isPlaying;
 
+//For creating enemies
+var spawnInterval;
+var spawnTime = 10000;
+var spawnAmount = 5;  
+
 var requestAnimFrame = window.requestAnimationFrame ||
 						window.webkitRequestAnimationFrame ||
 						window.mozRequestAnimationFrame ||
@@ -72,6 +77,15 @@ function spawnEnemy(count) {
 	}
 }
 
+function startCreatingEnemies() {
+	stopCreatingEnemies();
+	spawnInterval = setInterval(function(){spawnEnemy(spawnAmount)}, spawnTime);
+}
+
+function stopCreatingEnemies() {
+	clearInterval(spawnInterval);
+}
+
 function loop() {
 	if(isPlaying) {
 		draw();
@@ -83,6 +97,7 @@ function loop() {
 function startLoop() {
 	isPlaying = true;
 	loop();
+	startCreatingEnemies();
 }
 
 function stopLoop() {
@@ -150,8 +165,8 @@ Player.prototype.chooseDir = function() {
 function Enemy() {
 	this.srcX = 320;
 	this.srcY = 96;
-	this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
-	this.drawY = Math.floor((Math.random() * gameHeight) - this.height);
+	this.drawX = Math.floor((Math.random() * gameWidth / 2) + gameWidth);
+	this.drawY = Math.floor((Math.random() * gameHeight - this.height));
 	this.width = 32;
 	this.height = 32;
 	this.speed = 5;
@@ -165,8 +180,8 @@ Enemy.prototype.draw = function() {
 Enemy.prototype.update = function() {
 	this.drawX -= this.speed;
 	if(this.drawX < 0) {
-		this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
-		this.drawY = Math.floor((Math.random() * gameHeight));
+		this.drawX = Math.floor((Math.random() * gameWidth / 2) + gameWidth);
+		this.drawY = Math.floor((Math.random() * gameHeight - this.height));
 	}
 }
 
