@@ -117,6 +117,10 @@ Player.prototype.draw = function() {
 }
 
 Player.prototype.update = function() {
+	if(this.drawX < 0) this.drawX = 0;
+	if(this.drawX > gameWidth - this.width) this.drawX = gameWidth - this.width;
+	if(this.drawY < 0) this.drawY = 0;
+	if(this.drawY > gameHeight - this.height) this.drawY = gameHeight - this.height;
 	this.chooseDir();
 }
 
@@ -135,7 +139,7 @@ function Enemy() {
 	this.srcX = 320;
 	this.srcY = 96;
 	this.drawX = Math.floor((Math.random() * 32) + gameWidth);
-	this.drawY = Math.floor((Math.random() * gameHeight));
+	this.drawY = Math.floor((Math.random() * gameHeight) - this.height);
 	this.width = 32;
 	this.height = 32;
 	this.speed = 5;
@@ -148,7 +152,11 @@ Enemy.prototype.draw = function() {
 }
 
 Enemy.prototype.update = function() {
-	this.drawX -= 1;
+	this.drawX -= this.speed;
+	if(this.drawX < 0) {
+		this.drawX = Math.floor((Math.random() * 32) + gameWidth);
+		this.drawY = Math.floor((Math.random() * gameHeight));
+	}
 }
 
 function checkKeyDown(e) {
