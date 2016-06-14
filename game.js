@@ -6,6 +6,9 @@ var ctxMap;
 var pl;
 var ctxPl;
 
+var enemyCv;
+var ctxEnemy;
+
 var drawBtn;
 var clearBtn;
 
@@ -36,11 +39,15 @@ function init() {
 	pl = document.getElementById("player");
 	ctxPl = pl.getContext("2d");
 
+	enemyCv = document.getElementById("enemy");
+	ctxEnemy = enemyCv.getContext("2d");
+
 	map.width = gameWidth;
 	map.height = gameHeight;
-
 	pl.width = gameWidth;
 	pl.height = gameHeight;
+	enemyCv.width = gameWidth;
+	enemyCv.height = gameHeight;
 
 	drawBtn = document.getElementById("drawBtn");
 	clearBtn = document.getElementById("clearBtn");
@@ -84,6 +91,7 @@ function draw() {
 
 function update() {
 	player.update();
+	enemy.update();
 }
 
 //Objects
@@ -126,7 +134,7 @@ Player.prototype.chooseDir = function() {
 function Enemy() {
 	this.srcX = 320;
 	this.srcY = 96;
-	this.drawX = 200;
+	this.drawX = 700;
 	this.drawY = 218;
 	this.width = 32;
 	this.height = 32;
@@ -134,8 +142,13 @@ function Enemy() {
 }
 
 Enemy.prototype.draw = function() {
-	ctxMap.drawImage(tiles, this.srcX, this.srcY, this.width, this.height, //image parammeters
+	clearCtxEnemy();
+	ctxEnemy.drawImage(tiles, this.srcX, this.srcY, this.width, this.height, //image parammeters
 		this.drawX, this.drawY, this.width, this.height); //coordinates on canvas
+}
+
+Enemy.prototype.update = function() {
+	this.drawX -= 1;
 }
 
 function checkKeyDown(e) {
@@ -194,6 +207,10 @@ function clearRect() {
 
 function clearCtxPl() {
 	ctxPl.clearRect(0, 0, gameWidth, gameHeight);
+}
+
+function clearCtxEnemy() {
+	ctxEnemy.clearRect(0, 0, gameWidth, gameHeight);
 }
 
 function drawBg() {
