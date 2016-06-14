@@ -11,3 +11,7 @@ body {
 	display: block;
 	margin: 30px auto 0;
 }
+#player {
+	display: block;
+	margin: -500px auto 0;
+}
