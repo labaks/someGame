@@ -134,8 +134,8 @@ Player.prototype.chooseDir = function() {
 function Enemy() {
 	this.srcX = 320;
 	this.srcY = 96;
-	this.drawX = 700;
-	this.drawY = 218;
+	this.drawX = Math.floor((Math.random() * 32) + gameWidth);
+	this.drawY = Math.floor((Math.random() * gameHeight));
 	this.width = 32;
 	this.height = 32;
 	this.speed = 5;
