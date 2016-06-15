@@ -94,13 +94,13 @@ function startGame() {
 	clearCtxPl();
 	player.drawX = 10;
 	player.drawY = 218;
-	destroyEnemies(spawnAmount);
 	player.draw();
 	startLoop();
+	destroyEnemies();
 }
 
 function resetHealth() {
-	health = 10;
+	health = 20;
 }
 
 function spawnEnemy(count) {
@@ -109,9 +109,10 @@ function spawnEnemy(count) {
 	}
 }
 
-function destroyEnemies(count) {
-	for (var i = 0; i < count; i++) {
+function destroyEnemies() {
+	for (var i = enemies.length - 1; i >= 0; i--) {
 		enemies[i].destroy();
+		console.log("enemy " + i + " destroyed");
 	}
 }
 
