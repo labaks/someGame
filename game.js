@@ -31,6 +31,9 @@ var enemies = [];
 
 var isPlaying;
 var health;
+var distance;
+
+var distanceInterval;
 
 var mapX = 0;
 var map1X = gameWidth;
@@ -79,6 +82,7 @@ function init() {
 	player = new Player;
 
 	resetHealth();
+	resetDistance();
 	drawBg();
 	player.draw();
 
@@ -90,6 +94,7 @@ function init() {
 
 function startGame() {
 	resetHealth();
+	resetDistance();
 	drawBg();
 	clearCtxPl();
 	player.drawX = 10;
@@ -97,10 +102,15 @@ function startGame() {
 	player.draw();
 	startLoop();
 	destroyEnemies();
+	countDistance();
 }
 
 function resetHealth() {
 	health = 20;
+}
+
+function resetDistance() {
+	distance = 0;
 }
 
 function spawnEnemy(count) {
@@ -112,7 +122,6 @@ function spawnEnemy(count) {
 function destroyEnemies() {
 	for (var i = enemies.length - 1; i >= 0; i--) {
 		enemies[i].destroy();
-		console.log("enemy " + i + " destroyed");
 	}
 }
 
@@ -123,6 +132,15 @@ function startCreatingEnemies() {
 
 function stopCreatingEnemies() {
 	clearInterval(spawnInterval);
+}
+
+function countDistance() {
+	stopCountDistance();
+	distanceInterval = setInterval(function(){distance++}, 1000);
+}
+
+function stopCountDistance() {
+	clearInterval(distanceInterval);
 }
 
 function loop() {
@@ -306,6 +324,7 @@ function clearCtxEnemy() {
 function updateStats() {
 	ctxStats.clearRect(0, 0, gameWidth, gameHeight);
 	ctxStats.fillText("Health: " + health, 10, 20);
+	ctxStats.fillText("Distance: " + distance + " meters", 680, 20);
 }
 
 function drawBg() {
