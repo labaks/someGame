@@ -84,12 +84,19 @@ function init() {
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
-	newGameBtn.addEventListener("click", startLoop, false);
+	newGameBtn.addEventListener("click", startGame, false);
 
 }
 
+function startGame() {
+	resetHealth();
+	drawBg();
+	player.draw();
+	startLoop();
+}
+
 function resetHealth() {
-	health = 100;
+	health = 10;
 }
 
 function spawnEnemy(count) {
