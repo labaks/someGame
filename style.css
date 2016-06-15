@@ -13,3 +13,12 @@ canvas {
 #player, #enemy, #stats {
 	margin: -500px auto 0;
 }
+input {
+	display: block;
+	margin: 5px auto 0;
+	border: 2px solid white;
+	background: black;
+	border-radius: 4px;
+	color: white;
+	font: 24px bold Courier;
+}

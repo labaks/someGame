@@ -12,8 +12,7 @@ var ctxEnemy;
 var stats;
 var ctxStats;
 
-var drawBtn;
-var clearBtn;
+var newGameBtn;
 
 var gameWidth = 800;
 var gameHeight = 500;
@@ -35,10 +34,13 @@ var health;
 
 var mapX = 0;
 var map1X = gameWidth;
+var velBg = 5;
+var bgWidth = 3000;
+var bgHeight = 1500;
 
 //For creating enemies
 var spawnInterval;
-var spawnTime = 6000;
+var spawnTime = 10000;
 var spawnAmount = 10;
 
 var requestAnimFrame = window.requestAnimationFrame ||
@@ -69,28 +71,25 @@ function init() {
 	stats.width = gameWidth;
 	stats.height = gameHeight;
 
-	ctxStats.fillStyle = "#3D3D3D";
-	ctxStats.font = "bold 15 Arial"
+	ctxStats.fillStyle = "#FFFFFF";
+	ctxStats.font = "bold 35 Arial"
 
-	drawBtn = document.getElementById("drawBtn");
-	clearBtn = document.getElementById("clearBtn");
-
-	drawBtn.addEventListener("click", drawRect, false);
-	clearBtn.addEventListener("click", clearRect, false);
+	newGameBtn = document.getElementById("newGame");
 
 	player = new Player;
 
 	resetHealth();
-
-	startLoop();
+	drawBg();
+	player.draw();
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
+	newGameBtn.addEventListener("click", startLoop, false);
 
 }
 
 function resetHealth() {
-	health = 10;
+	health = 100;
 }
 
 function spawnEnemy(count) {
@@ -117,14 +116,15 @@ function loop() {
 }
 
 function startLoop() {
-	isPlaying = true;
-	loop();
-	startCreatingEnemies();
+	if(!isPlaying) {
+		isPlaying = true;
+		loop();
+		startCreatingEnemies();
+	}
 }
 
 function stopLoop() {
-	isPlaying = false;
-}
+	isPlaying = false;}
 
 function draw() {
 	player.draw();
@@ -147,9 +147,8 @@ function update() {
 }
 
 function moveBg() {
-	var vel = 4
-	mapX -= 4;
-	map1X -= 4;
+	mapX -= velBg;
+	map1X -= velBg;
 	if(mapX + gameWidth < 0) mapX = gameWidth - 5;
 	if(map1X + gameWidth < 0) map1X = gameWidth - 5;
 
@@ -157,8 +156,8 @@ function moveBg() {
 
 //Objects
 function Player() {
-	this.srcX = 160;
-	this.srcY = 64;
+	this.srcX = 128;
+	this.srcY = 96;
 	this.drawX = 10;
 	this.drawY = 218;
 	this.width = 32;
@@ -179,7 +178,7 @@ Player.prototype.draw = function() {
 
 Player.prototype.update = function() {
 
-	if(health <= 0) resetHealth();
+	if(health <= 0) stopLoop();
 	if(this.drawX < 0) this.drawX = 0;
 	if(this.drawX > gameWidth - this.width) this.drawX = gameWidth - this.width;
 	if(this.drawY < 0) this.drawY = 0;
@@ -190,7 +189,7 @@ Player.prototype.update = function() {
 			this.drawY >= enemies[i].drawY &&
 			this.drawX <= enemies[i].drawX + enemies[i].width &&
 			this.drawY <= enemies[i].drawY + enemies[i].height) {
-			health--;
+			health -= 3;
 		}
 	}
 	this.chooseDir();
@@ -209,7 +208,7 @@ Player.prototype.chooseDir = function() {
 
 function Enemy() {
 	this.srcX = 320;
-	this.srcY = 96;
+	this.srcY = 0;
 	this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
 	this.drawY = Math.floor((Math.random() * gameHeight));
 	this.width = 32;
@@ -278,16 +277,6 @@ function checkKeyUp(e) {
 	}
 }
 
-function drawRect() {
-	ctxMap.fillStyle = "3D3D3D";
-	ctxMap.fillRect(10, 10, 100, 100);
-}
-
-function clearRect() {
-	ctxMap.clearRect(0, 0, 800, 500);
-	drawBg();
-}
-
 function clearCtxPl() {
 	ctxPl.clearRect(0, 0, gameWidth, gameHeight);
 }
@@ -303,12 +292,8 @@ function updateStats() {
 
 function drawBg() {
 	ctxMap.clearRect(0, 0, gameWidth, gameHeight);
-	ctxMap.drawImage(bg, 0, 0, 736, 552, //image parammeters
+	ctxMap.drawImage(bg, 0, 0, bgWidth, bgHeight, //image parammeters
 		mapX, 0, gameWidth, gameHeight); //coordinates on canvas
-	ctxMap.drawImage(bg1, 0, 0, 736, 552, //image parammeters
+	ctxMap.drawImage(bg1, 0, 0, bgWidth, bgHeight, //image parammeters
 		map1X, 0, gameWidth, gameHeight); //coordinates on canvas
 }
-
-// function getRandomInt(min, max) {
-// 	return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
