@@ -1,6 +1,8 @@
 body {
 	background: #333;
 }
+p {margin: 0;}
+
 #gameName {
 	color: #fff;
 	text-align: center;
@@ -21,4 +23,30 @@ input {
 	border-radius: 4px;
 	color: white;
 	font: 24px bold Courier;
+}
+#modalDialog {
+	width: 800px;
+	height: 500px;
+	margin: -538px auto 0;
+	background: #000;
+	opacity: .7;
+	font-size: 25px;
+	box-sizing: border-box;
+	padding: 120px 200px;
+	text-align: center;
+	display: none;
+}
+#modalDialog span, #modalDialog p {
+	color: white;
+}
+.control {
+	width: 120px;
+	margin-left: 265px;
+	text-align: left;
+}
+#gameOverMessage+p {
+	margin-bottom: 20px;
+}
+#gameOverMessage, #passedMessage {
+	display: none;
 }

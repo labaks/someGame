@@ -33,6 +33,11 @@ var isPlaying;
 var health;
 var distance;
 
+var modalDialog;
+var gameOverMessage;
+var passedMessage;
+var distanceMessage;
+
 var distanceInterval;
 
 var mapX = 0;
@@ -78,6 +83,10 @@ function init() {
 	ctxStats.font = "bold 35 Arial"
 
 	newGameBtn = document.getElementById("newGame");
+	modalDialog = document.getElementById("modalDialog");
+	gameOverMessage = document.getElementById("gameOverMessage");
+	passedMessage = document.getElementById("passedMessage");
+	distanceMessage = document.getElementById("distance");
 
 	player = new Player;
 
@@ -85,6 +94,7 @@ function init() {
 	resetDistance();
 	drawBg();
 	player.draw();
+	showModalDialog();
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
@@ -103,6 +113,7 @@ function startGame() {
 	startLoop();
 	destroyEnemies();
 	countDistance();
+	hideModalDialog();
 }
 
 function resetHealth() {
@@ -171,6 +182,14 @@ function draw() {
 	}
 }
 
+function gameOver() {
+	stopLoop();
+	showModalDialog();
+	gameOverMessage.style.display = "block";
+	passedMessage.style.display = "block";
+	distanceMessage.innerHTML = distance;
+}
+
 function update() {
 	moveBg();
 	drawBg();
@@ -214,7 +233,7 @@ Player.prototype.draw = function() {
 
 Player.prototype.update = function() {
 
-	if(health <= 0) stopLoop();
+	if(health <= 0) gameOver();
 	if(this.drawX < 0) this.drawX = 0;
 	if(this.drawX > gameWidth - this.width) this.drawX = gameWidth - this.width;
 	if(this.drawY < 0) this.drawY = 0;
@@ -333,4 +352,12 @@ function drawBg() {
 		mapX, 0, gameWidth, gameHeight); //coordinates on canvas
 	ctxMap.drawImage(bg1, 0, 0, bgWidth, bgHeight, //image parammeters
 		map1X, 0, gameWidth, gameHeight); //coordinates on canvas
+}
+
+function showModalDialog() {
+	modalDialog.style.display = "block";
+}
+
+function hideModalDialog() {
+	modalDialog.style.display = "none";
 }
