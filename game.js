@@ -9,6 +9,9 @@ var ctxPl;
 var enemyCv;
 var ctxEnemy;
 
+var stats;
+var ctxStats;
+
 var drawBtn;
 var clearBtn;
 
@@ -47,12 +50,20 @@ function init() {
 	enemyCv = document.getElementById("enemy");
 	ctxEnemy = enemyCv.getContext("2d");
 
+	stats = document.getElementById("stats");
+	ctxStats = stats.getContext("2d");
+
 	map.width = gameWidth;
 	map.height = gameHeight;
 	pl.width = gameWidth;
 	pl.height = gameHeight;
 	enemyCv.width = gameWidth;
 	enemyCv.height = gameHeight;
+	stats.width = gameWidth;
+	stats.height = gameHeight;
+
+	ctxStats.fillStyle = "#3D3D3D";
+	ctxStats.font = "bold 15 Arial"
 
 	drawBtn = document.getElementById("drawBtn");
 	clearBtn = document.getElementById("clearBtn");
@@ -65,6 +76,8 @@ function init() {
 	drawBg();
 
 	startLoop();
+
+	updateStats();
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
@@ -249,6 +262,11 @@ function clearCtxPl() {
 
 function clearCtxEnemy() {
 	ctxEnemy.clearRect(0, 0, gameWidth, gameHeight);
+}
+
+function updateStats() {
+	ctxStats.clearRect(0, 0, gameWidth, gameHeight);
+	ctxStats.fillText("Player", 10, 10);
 }
 
 function drawBg() {
