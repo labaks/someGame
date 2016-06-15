@@ -28,6 +28,7 @@ var player;
 var enemies = [];
 
 var isPlaying;
+var health;
 
 //For creating enemies
 var spawnInterval;
@@ -73,15 +74,20 @@ function init() {
 
 	player = new Player;
 
+	resetHealth();
+
 	drawBg();
 
 	startLoop();
 
-	updateStats();
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
 
+}
+
+function resetHealth() {
+	health = 10;
 }
 
 function spawnEnemy(count) {
@@ -127,6 +133,7 @@ function draw() {
 }
 
 function update() {
+	updateStats();
 	player.update();
 
 	for (var i = 0; i < enemies.length; i++) {
@@ -157,10 +164,21 @@ Player.prototype.draw = function() {
 }
 
 Player.prototype.update = function() {
+
+	if(health <= 0) resetHealth();
 	if(this.drawX < 0) this.drawX = 0;
 	if(this.drawX > gameWidth - this.width) this.drawX = gameWidth - this.width;
 	if(this.drawY < 0) this.drawY = 0;
 	if(this.drawY > gameHeight - this.height) this.drawY = gameHeight - this.height;
+
+	for (var i = 0; i < enemies.length; i++) {
+		if(this.drawX >= enemies[i].drawX &&
+			this.drawY >= enemies[i].drawY &&
+			this.drawX <= enemies[i].drawX + enemies[i].width &&
+			this.drawY <= enemies[i].drawY + enemies[i].height) {
+			health--;
+		}
+	}
 	this.chooseDir();
 }
 
@@ -266,7 +284,7 @@ function clearCtxEnemy() {
 
 function updateStats() {
 	ctxStats.clearRect(0, 0, gameWidth, gameHeight);
-	ctxStats.fillText("Player", 10, 10);
+	ctxStats.fillText("Health: " + health, 10, 20);
 }
 
 function drawBg() {
