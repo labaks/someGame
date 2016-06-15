@@ -21,6 +21,9 @@ var gameHeight = 500;
 var bg = new Image();
 bg.src = "img/bg.jpg";
 
+var bg1 = new Image();
+bg1.src = "img/bg.jpg";
+
 var tiles = new Image();
 tiles.src = "img/tiles.png";
 
@@ -29,6 +32,9 @@ var enemies = [];
 
 var isPlaying;
 var health;
+
+var mapX = 0;
+var map1X = gameWidth;
 
 //For creating enemies
 var spawnInterval;
@@ -76,10 +82,7 @@ function init() {
 
 	resetHealth();
 
-	drawBg();
-
 	startLoop();
-
 
 	document.addEventListener("keydown", checkKeyDown, false);
 	document.addEventListener("keyup", checkKeyUp, false);
@@ -133,12 +136,23 @@ function draw() {
 }
 
 function update() {
+	moveBg();
+	drawBg();
 	updateStats();
 	player.update();
 
 	for (var i = 0; i < enemies.length; i++) {
 		enemies[i].update();
 	}
+}
+
+function moveBg() {
+	var vel = 4
+	mapX -= 4;
+	map1X -= 4;
+	if(mapX + gameWidth < 0) mapX = gameWidth - 5;
+	if(map1X + gameWidth < 0) map1X = gameWidth - 5;
+
 }
 
 //Objects
@@ -288,8 +302,11 @@ function updateStats() {
 }
 
 function drawBg() {
+	ctxMap.clearRect(0, 0, gameWidth, gameHeight);
 	ctxMap.drawImage(bg, 0, 0, 736, 552, //image parammeters
-		0, 0, gameWidth, gameHeight); //coordinates on canvas
+		mapX, 0, gameWidth, gameHeight); //coordinates on canvas
+	ctxMap.drawImage(bg1, 0, 0, 736, 552, //image parammeters
+		map1X, 0, gameWidth, gameHeight); //coordinates on canvas
 }
 
 // function getRandomInt(min, max) {
