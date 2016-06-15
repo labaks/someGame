@@ -29,7 +29,7 @@ var isPlaying;
 //For creating enemies
 var spawnInterval;
 var spawnTime = 6000;
-var spawnAmount = 3;
+var spawnAmount = 10;
 
 var requestAnimFrame = window.requestAnimationFrame ||
 						window.webkitRequestAnimationFrame ||
@@ -179,10 +179,14 @@ Enemy.prototype.draw = function() {
 
 Enemy.prototype.update = function() {
 	this.drawX -= this.speed;
-	if(this.drawX < 0) {
-		this.drawX = Math.floor((Math.random() * gameWidth) + gameWidth);
-		this.drawY = Math.floor((Math.random() * gameHeight));
+
+	if(this.drawX + this.width < 0) {
+		this.destroy();
 	}
+}
+
+Enemy.prototype.destroy = function() {
+	enemies.splice(enemies.indexOf(this), 1);
 }
 
 function checkKeyDown(e) {
