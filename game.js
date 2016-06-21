@@ -46,6 +46,14 @@ var velBg = 5;
 var bgWidth = 3000;
 var bgHeight = 1500;
 
+//For animation
+var plAnimInterval;
+var plOffset = 0;
+var plAnimIndex = 0;
+var enemyAnimInterval;
+var enemyOffset = 0;
+var enemyAnimIndex = 0;
+
 //For creating enemies
 var spawnInterval;
 var spawnTime = 10000;
@@ -92,6 +100,7 @@ function init() {
 
 	resetHealth();
 	resetDistance();
+	stopAnimation();
 	drawBg();
 	player.draw();
 	showModalDialog();
@@ -114,6 +123,7 @@ function startGame() {
 	destroyEnemies();
 	countDistance();
 	hideModalDialog();
+	animation();
 }
 
 function resetHealth() {
@@ -154,6 +164,20 @@ function stopCountDistance() {
 	clearInterval(distanceInterval);
 }
 
+function animation() {
+	stopAnimation();
+	plAnimInterval = setInterval(function(){
+		player.anim();
+		for (var i = enemies.length - 1; i >= 0; i--) {
+			enemies[i].anim();
+		}
+	}, 1000 / 24);
+}
+
+function stopAnimation() {
+	clearInterval(plAnimInterval);
+}
+
 function loop() {
 	if(isPlaying) {
 		draw();
@@ -171,7 +195,8 @@ function startLoop() {
 }
 
 function stopLoop() {
-	isPlaying = false;}
+	isPlaying = false;
+}
 
 function draw() {
 	player.draw();
@@ -218,6 +243,8 @@ function Player() {
 	this.width = 32;
 	this.height = 32;
 	this.speed = 5;
+	this.startAnim = 96;
+	this.endAnim = 160;
 
 	this.isUp = false;
 	this.isDown = false;
@@ -261,6 +288,16 @@ Player.prototype.chooseDir = function() {
 		this.drawX += this.speed;
 }
 
+Player.prototype.anim = function() {
+	if(plOffset < this.width) plAnimIndex++;
+	else {
+		plAnimIndex = 0;
+	}
+	plOffset = this.width * plAnimIndex;
+	this.srcX += plOffset;
+	if(this.srcX > this.endAnim) this.srcX = this.startAnim;
+}
+
 function Enemy() {
 	this.srcX = 320;
 	this.srcY = 0;
@@ -269,6 +306,8 @@ function Enemy() {
 	this.width = 32;
 	this.height = 32;
 	this.speed = 5;
+	this.startAnim = 288;
+	this.endAnim = 352;
 }
 
 Enemy.prototype.draw = function() {
@@ -282,6 +321,16 @@ Enemy.prototype.update = function() {
 	if(this.drawX + this.width < 0) {
 		this.destroy();
 	}
+}
+
+Enemy.prototype.anim = function() {
+	if(enemyOffset < this.width) enemyAnimIndex++;
+	else {
+		enemyAnimIndex = 0;
+	}
+	enemyOffset = this.width * enemyAnimIndex;
+	this.srcX += enemyOffset;
+	if(this.srcX > this.endAnim) this.srcX = this.startAnim;
 }
 
 Enemy.prototype.destroy = function() {
